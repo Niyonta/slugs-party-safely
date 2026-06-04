@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slugs Party Safely with Dignity and Care - Partying Safely EEP Training</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#F7F9FC;color:#36454F;line-height:1.6}
+.app{max-width:960px;margin:0 auto;padding:16px}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 0 14px;border-bottom:1px solid #E8EDF2;margin-bottom:18px}
+.nav-dots{display:flex;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%;background:#D0D8E0;transition:background .2s;cursor:pointer}
+.dot.active{background:#185FA5}.dot.done{background:#3B6D11}
+.sec-label{font-size:11px;color:#8896A5;letter-spacing:.07em;text-transform:uppercase}
+.timer{font-size:12px;color:#8896A5;background:#E8EDF2;padding:4px 10px;border-radius:6px;font-variant-numeric:tabular-nums}
+.section{display:none}.section.active{display:block}
+h1{font-size:2rem;font-weight:700;color:#0A1F44;line-height:1.25;margin-bottom:8px}
+h2.sh{font-size:1.3rem;font-weight:700;color:#0A1F44;margin-bottom:6px}
+p.lead{font-size:.93rem;color:#8896A5;margin-bottom:14px}
+.card{background:#fff;border:1px solid #E8EDF2;border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden}
+.card-accent{border-left:4px solid #185FA5}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:5px}
+.pb{background:#E6F1FB;color:#0C447C}.pr{background:#FCEBEB;color:#791F1F}
+.pa{background:#FAEEDA;color:#633806}.pg{background:#EAF3DE;color:#27500A}.pp{background:#EEEDFE;color:#3C3489}
+.dt{font-size:.82rem;font-weight:700;color:#36454F;margin-bottom:3px}
+.db{font-size:.82rem;color:#8896A5;line-height:1.55}
+.btn{font-size:.88rem;padding:8px 18px;border-radius:7px;border:1px solid #CBD5E0;background:transparent;color:#36454F;cursor:pointer;transition:background .15s}
+.btn:hover{background:#EEF2F7}
+.btn.primary{background:#185FA5;color:#fff;border-color:#185FA5}
+.btn.primary:hover{background:#0C447C}
+.sopt{background:#fff;border:1px solid #CBD5E0;border-radius:7px;padding:10px 14px;cursor:pointer;font-size:.88rem;color:#36454F;text-align:left;display:block;width:100%;margin:6px 0;transition:all .15s}
+.sopt:hover:not(:disabled){background:#F7F9FC;border-color:#185FA5}
+.sopt.correct{border-color:#3B6D11;background:#EAF3DE;color:#27500A}
+.sopt.wrong{border-color:#A32D2D;background:#FCEBEB;color:#791F1F}
+.fb{font-size:.82rem;padding:10px 14px;border-radius:7px;margin-top:8px;display:none;line-height:1.55}
+.fb.show{display:block}
+.fb.good{background:#EAF3DE;color:#27500A}
+.fb.bad{background:#FCEBEB;color:#791F1F}
+.myth-row{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:8px;margin-bottom:8px;background:#fff;border:1px solid #E8EDF2}
+.myth-icon{flex-shrink:0;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px}
+.res-card{background:#fff;border:1px solid #E8EDF2;border-radius:10px;padding:12px 14px;margin-bottom:8px;border-left:4px solid #185FA5}
+.res-title{font-size:.88rem;font-weight:700;color:#36454F;margin-bottom:2px}
+.res-sub{font-size:.78rem;color:#8896A5;line-height:1.5}
+.res-link{font-size:.78rem;color:#185FA5}
+.progress-bar{height:3px;background:#E8EDF2;border-radius:2px;margin-bottom:18px}
+.progress-fill{height:100%;background:#185FA5;border-radius:2px;transition:width .4s}
+.score-box{text-align:center;padding:20px 0}
+.score-num{font-size:2.5rem;font-weight:700;color:#185FA5}
+.score-msg{font-size:.88rem;color:#8896A5;margin-top:4px}
+.fries-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.fries-item{flex:1;min-width:80px;text-align:center;padding:12px 4px;border-radius:8px}
+.fi-l{font-size:1.6rem;font-weight:700;color:#fff}
+.fi-w{font-size:.7rem;margin-top:2px;color:rgba(255,255,255,.8)}
+a{color:#185FA5}
+.icon-circle{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;font-size:18px;flex-shrink:0}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.stat-card{background:#fff;border:1px solid #E8EDF2;border-radius:10px;padding:14px;text-align:center}
+.stat-num{font-size:2rem;font-weight:700;line-height:1}
+.stat-lbl{font-size:.75rem;color:#8896A5;margin-top:4px;line-height:1.4}
+.chart-container{background:#fff;border:1px solid #E8EDF2;border-radius:10px;padding:14px;margin-bottom:12px}
+.section-icon{float:right;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:-4px 0 8px 12px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="nav-bar">
+    <span class="sec-label" id="sectionLabel">Welcome</span>
+    <div class="nav-dots" id="navDots"></div>
+    <span class="timer" id="timerDisplay">10:00</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <!-- S0 Welcome -->
+  <div class="section active" id="sec0">
+    <h1 style="font-size:2.1rem;font-weight:700;color:#0A1F44;line-height:1.15;margin-bottom:2px">Slugs Party Safely</h1>
+    <p style="font-size:1.35rem;font-weight:400;color:#0A1F44;margin-bottom:2px;padding-left:1.6rem"><span style="font-size:.78rem;font-weight:400;color:#8896A5;letter-spacing:.02em">with </span><span style="font-weight:700;color:#185FA5">Dignity and Care</span></p>
+    <p style="font-size:.88rem;color:#8896A5;margin-bottom:10px;margin-top:4px">A 10-minute training for first-year Slugs on affirmative consent, alcohol and drug safety, and your rights at UCSC</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">
+      <div class="card" style="text-align:center;padding:10px 8px;background:#E6F1FB;border:1px solid #B5D4F4">
+        <div style="font-size:1.4rem">🐌</div>
+        <p style="margin-top:5px;font-size:.78rem;font-weight:700;color:#0A1F44;line-height:1.3">Slugs Party Safely<br><span style="font-size:.68rem;color:#185FA5;font-weight:500">with Dignity and Care</span></p>
+      </div>
+      <div class="card" style="text-align:center;padding:10px 8px">
+        <div style="font-size:1.4rem">🛡️</div>
+        <p style="margin-top:5px;font-size:.82rem;font-weight:600;color:#0A1F44">1. Definitions and Policies</p>
+      </div>
+      <div class="card" style="text-align:center;padding:10px 8px">
+        <div style="font-size:1.4rem">📊</div>
+        <p style="margin-top:5px;font-size:.82rem;font-weight:600;color:#0A1F44">2. The Data</p>
+      </div>
+      <div class="card" style="text-align:center;padding:10px 8px">
+        <div style="font-size:1.4rem">⚠️</div>
+        <p style="margin-top:5px;font-size:.82rem;font-weight:600;color:#0A1F44">3. Alcohol and Drugs</p>
+      </div>
+      <div class="card" style="text-align:center;padding:10px 8px">
+        <div style="font-size:1.4rem">🎯</div>
+        <p style="margin-top:5px;font-size:.82rem;font-weight:600;color:#0A1F44">4. Scenario Challenge</p>
+      </div>
+      <div class="card" style="text-align:center;padding:10px 8px">
+        <div style="font-size:1.4rem">🤝🏽</div>
+        <p style="margin-top:5px;font-size:.82rem;font-weight:600;color:#0A1F44">5. Practical Safety Toolkit</p>
+      </div>
+      <div class="card" style="text-align:center;padding:10px 8px">
+        <div style="font-size:1.4rem">🆘</div>
+        <p style="margin-top:5px;font-size:.82rem;font-weight:600;color:#0A1F44">6. Recognizing and Reporting</p>
+      </div>
+      <div class="card" style="text-align:center;padding:10px 8px">
+        <div style="font-size:1.4rem">❤️</div>
+        <p style="margin-top:5px;font-size:.82rem;font-weight:600;color:#0A1F44">7. Resources</p>
+      </div>
+
+    </div>
+    <p class="db" style="margin-bottom:8px">Content may be difficult for survivors - CARE at <a href="mailto:care@ucsc.edu">care@ucsc.edu</a> offers alternative options.</p>
+    <div style="font-size:.63rem;color:#8896A5;margin-bottom:10px;line-height:1.8">
+      <span style="font-weight:600;color:#0A1F44">Key sources: </span>
+      <a href="https://policy.ucop.edu/doc/4000385/SVSH" target="_blank" style="color:#185FA5">UC SVSH Policy</a> &middot;
+      <a href="https://titleix.ucsc.edu" target="_blank" style="color:#185FA5">UCSC Title IX / EEP</a> &middot;
+      <a href="https://care.ucsc.edu" target="_blank" style="color:#185FA5">UCSC CARE</a> &middot;
+      <a href="https://www.rainn.org/get-help" target="_blank" style="color:#185FA5">RAINN</a>
+    </div>
+    <button class="btn primary" onclick="goTo(1)">Start training →</button>
+  </div>
+
+  <!-- S1 Definitions -->
+  <div class="section" id="sec1">
+    <h2 class="sh" style="margin-bottom:5px"><span class="section-icon" style="background:#E6F1FB">🛡️</span>1 — Definitions and Policies</h2>
+
+    <!-- 4 definitions equal weight 2x2 -->
+    <div style="font-size:.72rem;color:#0A1F44;font-weight:600;margin-bottom:5px">Definitions - <a href="https://policy.ucop.edu/doc/4000385/SVSH" target="_blank" style="color:#3C3489">UC Sexual Violence and Sexual Harassment (SVSH) Policy</a></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
+      <div class="card" style="border-left:4px solid #3C3489;padding:7px 10px">
+        <div class="dt" style="color:#3C3489;margin-bottom:3px;font-size:.82rem">Consent</div>
+        <div class="db" style="font-size:.75rem;line-height:1.4;margin-bottom:4px">Affirmative, conscious, and voluntary - revocable at any time.</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px">
+          <span style="background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC;border-radius:5px;font-size:11px;font-weight:600;padding:2px 7px">Affirmative</span>
+          <span style="background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC;border-radius:5px;font-size:11px;font-weight:600;padding:2px 7px">Conscious</span>
+          <span style="background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC;border-radius:5px;font-size:11px;font-weight:600;padding:2px 7px">Voluntary</span>
+          <span style="background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC;border-radius:5px;font-size:11px;font-weight:600;padding:2px 7px">Revocable</span>
+        </div>
+        <div style="font-size:.7rem;color:#534AB7;padding-left:2px">Affirmative also requires:</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px;padding-left:8px">
+          <span style="background:#EAF3DE;color:#27500A;border:0.5px solid #97C459;border-radius:5px;font-size:10px;font-weight:600;padding:2px 7px">Conscious</span>
+          <span style="background:#EAF3DE;color:#27500A;border:0.5px solid #97C459;border-radius:5px;font-size:10px;font-weight:600;padding:2px 7px">Freely given</span>
+          <span style="background:#EAF3DE;color:#27500A;border:0.5px solid #97C459;border-radius:5px;font-size:10px;font-weight:600;padding:2px 7px">Mutual</span>
+        </div>
+      </div>
+      <div class="card" style="border-left:4px solid #A32D2D;padding:7px 10px">
+        <div class="dt" style="color:#A32D2D;margin-bottom:3px;font-size:.82rem">⚡ Incapacitation</div>
+        <div class="db" style="font-size:.75rem;line-height:1.4">Beyond drunkenness or intoxication. Not automatic from drinking - but substances are always a warning sign.</div>
+      </div>
+      <div class="card" style="border-left:4px solid #C05010;padding:7px 10px">
+        <div class="dt" style="color:#C05010;margin-bottom:3px;font-size:.82rem">⚡ Sexual Violence</div>
+        <div class="db" style="font-size:.75rem;line-height:1.4">Sexual assault (contact or penetration), relationship violence, stalking, and sexual exploitation. Always requires absence of consent.</div>
+      </div>
+      <div class="card" style="border-left:4px solid #185FA5;padding:7px 10px">
+        <div class="dt" style="color:#185FA5;margin-bottom:3px;font-size:.82rem">🗣️ Sexual Harassment</div>
+        <div class="db" style="font-size:.75rem;line-height:1.4">Unwelcome sexual conduct sufficiently severe or pervasive to interfere with a person's ability to participate in education or employment.</div>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid #3B6D11;padding:7px 10px;margin-bottom:7px">
+      <div class="dt" style="color:#3B6D11;margin-bottom:3px;font-size:.82rem">🛡️ Amnesty Policy</div>
+      <div class="db" style="font-size:.75rem;line-height:1.4">Alcohol or drug use will not result in a conduct violation for a student who reports. (<a href="https://studentconduct.ucsc.edu/policies/alcohol-or-drug/" target="_blank" style="color:#3B6D11">UCSC RAP</a>)</div>
+    </div>
+
+    <!-- Prohibitions -->
+    <div class="card" style="border-left:4px solid #028090;padding:6px 10px;margin-bottom:6px">
+      <div class="dt" style="color:#028090;margin-bottom:4px;font-size:.75rem">Under SVSH Policy - none of the following constitute consent:</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <span class="pill pr">✗ Silence</span>
+        <span class="pill pr">✗ Pressure or coercion</span>
+        <span class="pill pr">✗ Past consent</span>
+        <span class="pill pr">✗ Drug- or alcohol-facilitated</span>
+        <span class="pill pr">✗ Incapacitation</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:2px">
+      <button class="btn" onclick="goTo(0)">← Back</button>
+      <button class="btn primary" onclick="goTo(2)">Next: The data →</button>
+    </div>
+  </div>
+
+  <!-- S2 Stats - Option A: fill bars for all 7 -->
+  <div class="section" id="sec2">
+    <h2 class="sh" style="margin-bottom:8px"><span class="section-icon" style="background:#E6F1FB">📊</span>2 — The Data</h2>
+
+    <div style="font-size:.72rem;font-weight:700;color:#000000;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px">The broader picture - national estimates</div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:10px">
+
+      <div style="background:#E1F5EE;border:0.5px solid #5DCAA5;border-radius:10px;padding:8px 10px">
+        <span style="font-size:16px;display:block;margin-bottom:4px">🔇</span>
+        <div style="font-size:1.5rem;font-weight:500;color:#0F6E56;line-height:1;margin-bottom:3px">80%</div>
+        <div style="font-size:.68rem;color:#1D9E75;line-height:1.4;margin-bottom:5px">of female college students do <strong>not</strong> report assault to police</div>
+        <div style="height:5px;border-radius:3px;background:rgba(0,0,0,.08);overflow:hidden;margin-bottom:3px"><div style="width:80%;height:100%;border-radius:3px;background:#1D9E75"></div></div>
+        <div style="font-size:9px;font-weight:500;color:#0F6E56;margin-bottom:3px">80 / 100</div>
+        <div style="font-size:.6rem;color:#0F6E56;opacity:.7">Source: <a href="https://rainn.org/statistics/campus-sexual-violence" target="_blank" style="color:#0F6E56">RAINN</a> - DOJ/BJS NCVS</div>
+      </div>
+
+      <div style="background:#EEEDFE;border:0.5px solid #AFA9EC;border-radius:10px;padding:8px 10px">
+        <span style="font-size:16px;display:block;margin-bottom:4px">🎓</span>
+        <div style="font-size:1.5rem;font-weight:500;color:#3C3489;line-height:1;margin-bottom:3px">13%</div>
+        <div style="font-size:.68rem;color:#534AB7;line-height:1.4;margin-bottom:5px">of college students <strong>report</strong> experiencing rape or sexual assault</div>
+        <div style="height:5px;border-radius:3px;background:rgba(0,0,0,.08);overflow:hidden;margin-bottom:3px"><div style="width:13%;height:100%;border-radius:3px;background:#534AB7"></div></div>
+        <div style="font-size:9px;font-weight:500;color:#3C3489;margin-bottom:3px">13 / 100</div>
+        <div style="font-size:.6rem;color:#3C3489;opacity:.7">Source: <a href="https://rainn.org/statistics/campus-sexual-violence" target="_blank" style="color:#3C3489">RAINN</a> - DOJ/BJS NCVS</div>
+      </div>
+
+      <div style="background:#EAF3DE;border:0.5px solid #97C459;border-radius:10px;padding:8px 10px">
+        <span style="font-size:16px;display:block;margin-bottom:4px">🥃</span>
+        <div style="font-size:1.5rem;font-weight:500;color:#27500A;line-height:1;margin-bottom:3px">75%</div>
+        <div style="font-size:.68rem;color:#3B6D11;line-height:1.4;margin-bottom:5px">of perpetrators used alcohol before the assault</div>
+        <div style="height:5px;border-radius:3px;background:rgba(0,0,0,.08);overflow:hidden;margin-bottom:3px"><div style="width:75%;height:100%;border-radius:3px;background:#3B6D11"></div></div>
+        <div style="font-size:9px;font-weight:500;color:#27500A;margin-bottom:3px">75 / 100</div>
+        <div style="font-size:.6rem;color:#27500A;opacity:.7">Source: <a href="https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/college-drinking" target="_blank" style="color:#27500A">NIAAA</a></div>
+      </div>
+
+      <div style="background:#FAECE7;border:0.5px solid #F0997B;border-radius:10px;padding:8px 10px">
+        <span style="font-size:16px;display:block;margin-bottom:4px">💊</span>
+        <div style="font-size:1.5rem;font-weight:500;color:#993C1D;line-height:1;margin-bottom:3px">50%</div>
+        <div style="font-size:.68rem;color:#D85A30;line-height:1.4;margin-bottom:5px">of campus sexual assaults involve substances including but not limited to alcohol</div>
+        <div style="height:5px;border-radius:3px;background:rgba(0,0,0,.08);overflow:hidden;margin-bottom:3px"><div style="width:50%;height:100%;border-radius:3px;background:#D85A30"></div></div>
+        <div style="font-size:9px;font-weight:500;color:#993C1D;margin-bottom:3px">50 / 100</div>
+        <div style="font-size:.6rem;color:#993C1D;opacity:.7">Source: <a href="https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/college-drinking" target="_blank" style="color:#993C1D">NIAAA</a></div>
+      </div>
+    </div>
+
+    <div style="font-size:.72rem;font-weight:700;color:#000000;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px">Who is most affected - prevalence by student group</div>
+    <div style="font-size:.63rem;color:#8896A5;margin-bottom:7px;font-style:italic;line-height:1.5">Source: <a href="https://www.aau.edu/key-issues/campus-climate-and-safety/aau-campus-climate-survey-2019" target="_blank" style="color:#185FA5">AAU Campus Climate Survey on Sexual Assault and Misconduct, 2019</a> (33 universities, n=181,752, cross-sectional).</div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:8px">
+      <div style="background:#FCEBEB;border:0.5px solid #F09595;border-radius:10px;padding:9px 10px">
+        <span style="font-size:16px;display:block;margin-bottom:4px">👩‍🎓</span>
+        <div style="font-size:1.5rem;font-weight:500;color:#791F1F;line-height:1;margin-bottom:2px">26.4%</div>
+        <div style="font-size:.7rem;font-weight:500;color:#A32D2D;margin-bottom:2px">Undergraduate women</div>
+        <div style="font-size:.63rem;color:#A32D2D;line-height:1.4;margin-bottom:5px">26 out of every 100 undergrad women reported assault since enrolling. For undergraduate men, 6.8 out of every 100 reported assault since enrolling.</div>
+        <div style="height:5px;border-radius:3px;background:rgba(0,0,0,.08);overflow:hidden;margin-bottom:3px"><div style="width:26.4%;height:100%;border-radius:3px;background:#A32D2D"></div></div>
+        <div style="font-size:9px;font-weight:500;color:#791F1F">26.4 / 100 women - 6.8 / 100 men</div>
+      </div>
+      <div style="background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:10px;padding:9px 10px">
+        <span style="font-size:16px;display:block;margin-bottom:4px">📚</span>
+        <div style="font-size:1.5rem;font-weight:500;color:#0C447C;line-height:1;margin-bottom:2px">16.9%</div>
+        <div style="font-size:.7rem;font-weight:500;color:#185FA5;margin-bottom:2px">Freshman women</div>
+        <div style="font-size:.63rem;color:#185FA5;line-height:1.4;margin-bottom:5px">Highest rate of any class year. 17 out of every 100 freshman women reported assault since enrolling.</div>
+        <div style="height:5px;border-radius:3px;background:rgba(0,0,0,.08);overflow:hidden;margin-bottom:3px"><div style="width:16.9%;height:100%;border-radius:3px;background:#185FA5"></div></div>
+        <div style="font-size:9px;font-weight:500;color:#0C447C">16.9 / 100</div>
+      </div>
+      <div style="background:#FAEEDA;border:0.5px solid #FAC775;border-radius:10px;padding:9px 10px">
+        <span style="font-size:16px;display:block;margin-bottom:4px">🏳️‍⚧️</span>
+        <div style="font-size:1.5rem;font-weight:500;color:#633806;line-height:1;margin-bottom:2px">23.1%</div>
+        <div style="font-size:.7rem;font-weight:500;color:#854F0B;margin-bottom:2px">TGQN students</div>
+        <div style="font-size:.63rem;color:#854F0B;line-height:1.4;margin-bottom:5px">Transgender, genderqueer, nonbinary and questioning. 23 out of every 100 TGQN students reported assault since enrolling.</div>
+        <div style="height:5px;border-radius:3px;background:rgba(0,0,0,.08);overflow:hidden;margin-bottom:3px"><div style="width:23.1%;height:100%;border-radius:3px;background:#B8860B"></div></div>
+        <div style="font-size:9px;font-weight:500;color:#633806">23.1 / 100</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:2px">
+      <button class="btn" onclick="goTo(1)">← Back</button>
+      <button class="btn primary" onclick="goTo(3)">Next: Alcohol and drugs →</button>
+    </div>
+  </div>
+
+  <!-- S3 Alcohol & Drugs -->
+  <div class="section" id="sec3">
+    <h2 class="sh" style="margin-bottom:4px"><span class="section-icon" style="background:#FAEEDA">⚠️</span>3 — Alcohol and Drugs</h2>
+    <p class="lead" style="margin-bottom:8px">Substances affect everyone in the room - including your ability to give and obtain consent, and your legal and ethical responsibilities.</p>
+    <div class="card" style="margin-bottom:8px">
+      <div class="dt" style="margin-bottom:6px">BAC impairment scale - drag to explore</div>
+      <div style="font-size:.68rem;color:#8896A5;margin-bottom:6px">Key: 1 standard drink = 12 oz regular beer (5%) = 5 oz wine (12%) = 1.5 oz spirits (40%). Each raises BAC by approximately 0.02-0.03%.</div>
+      <input type="range" min="0" max="5" step="1" value="0" id="bacSlider" style="width:100%;margin:4px 0;accent-color:#185FA5" oninput="updateBAC(this.value)">
+      <div style="height:18px;border-radius:8px;background:#E8EDF2;overflow:hidden;margin:6px 0">
+        <div id="bacFill" style="height:100%;border-radius:8px;width:2%;background:#3B6D11;transition:width .4s,background .4s"></div>
+      </div>
+      <div id="bacLabel" class="db" style="margin-top:6px;min-height:2.5rem">Move the slider to explore impairment levels.</div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-icon" style="background:#FCEBEB;color:#A32D2D">✗</div>
+      <div><div style="font-size:.82rem;font-weight:700;color:#A32D2D;font-style:italic">"Drunk but conscious = can consent."</div>
+      <div class="db" style="margin-top:3px">Intoxication compromises judgment and communication. Initiating with someone visibly impaired puts you at serious legal and ethical risk - even if they don't say "no"</div></div>
+    </div>
+    <div class="myth-row">
+      <div class="myth-icon" style="background:#FCEBEB;color:#A32D2D">✗</div>
+      <div><div style="font-size:.82rem;font-weight:700;color:#A32D2D;font-style:italic">"I was drunk too, so I'm not responsible."</div>
+      <div class="db" style="margin-top:3px">Under UC <a href="https://policy.ucop.edu/doc/4000385/SVSH" target="_blank" style="color:#A32D2D">SVSH Policy</a>, being intoxicated does not remove your obligation to obtain consent. You can be found responsible even while under the influence.</div></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn" onclick="goTo(2)">← Back</button>
+      <button class="btn primary" onclick="goTo(4)">Next: Scenario Challenge →</button>
+    </div>
+  </div>
+
+  <!-- S3b Scenario Reference -->
+  <div class="section" id="sec3b">
+    <h2 class="sh" style="margin-bottom:6px"><span class="section-icon" style="background:#EAF3DE">🎯</span>4 — Scenario Challenge</h2>
+    <p class="lead" style="margin-bottom:14px">Part of this training. Complete it within 30 minutes.</p>
+    <div style="background:#0A1F44;border-radius:12px;padding:22px 24px;text-align:center;margin-bottom:14px">
+      <div style="font-size:2.4rem;margin-bottom:10px">🎯</div>
+      <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:6px">Scenario Assignment</div>
+      <div style="font-size:.82rem;color:#AECBE8;line-height:1.6;margin-bottom:14px">Six real-world scenarios on consent, substances, and bystander action. Read each situation and choose your response.</div>
+      <div style="display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
+        <span style="background:#185FA5;color:#fff;border-radius:6px;padding:5px 12px;font-size:.78rem;font-weight:600">6 scenarios</span>
+        <span style="background:#3B6D11;color:#fff;border-radius:6px;padding:5px 12px;font-size:.78rem;font-weight:600">~10 minutes</span>
+        <span style="background:#854F0B;color:#fff;border-radius:6px;padding:5px 12px;font-size:.78rem;font-weight:600">Complete within 30 min</span>
+      </div>
+      <div style="font-size:.78rem;color:#7EB8E8">You will receive a link to this assignment at the end of the session.</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn" onclick="goTo(3)">← Back</button>
+      <button class="btn primary" onclick="goTo(5)">Next: Safety toolkit →</button>
+    </div>
+  </div>
+
+  <!-- S4b Reporting slide -->
+  <div class="section" id="sec4b">
+    <h2 class="sh" style="margin-bottom:4px"><span class="section-icon" style="background:#FCEBEB">🆘</span>6 — Recognizing and Reporting Incidents</h2>
+    <p class="lead" style="margin-bottom:6px">Partying safely also means knowing what to do after.</p>
+
+    <!-- Row 1: Recognize + Report -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
+      <div class="card" style="border-left:4px solid #A32D2D;padding:7px 12px">
+        <div class="dt" style="color:#A32D2D;margin-bottom:3px">Recognize it</div>
+        <div class="db" style="font-size:.75rem;line-height:1.5">
+          - Unwanted touching or penetration<br>
+          - Coercion or pressure<br>
+          - Drug- or alcohol-facilitated contact<br>
+          <span style="font-style:italic;margin-top:2px;display:block">You don't need certainty to seek support.</span>
+        </div>
+      </div>
+      <div class="card" style="border-left:4px solid #C05010;padding:7px 12px">
+        <div class="dt" style="margin-bottom:3px"><a href="https://titleix.ucsc.edu/reporting-to-title-ix-hacer-un-informe/" target="_blank" style="color:#C05010;text-decoration:none;border-bottom:1px solid #C05010">Report it</a></div>
+        <div class="db" style="font-size:.75rem;line-height:1.5">
+          - Online, by phone, or in person<br>
+          - Can be filed by affected party or third party<br>
+          - No decision on next steps required to report
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Resolution options -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
+      <div style="background:#EEEDFE;border-radius:8px;padding:7px 10px;border-left:4px solid #3C3489">
+        <div style="font-size:.82rem;font-weight:700;color:#3C3489;margin-bottom:3px"><a href="https://titleix.ucsc.edu/investigations/" target="_blank" style="color:#3C3489;text-decoration:none;border-bottom:1px solid #3C3489">Formal Investigation</a></div>
+        <div class="db" style="font-size:.73rem;line-height:1.4">
+          - Administrative process<br>
+          - Examines allegations, interviews parties<br>
+          - Determines policy violation<br>
+          - Not a criminal process
+        </div>
+      </div>
+      <div style="background:#E0F4F6;border-radius:8px;padding:7px 10px;border-left:4px solid #028090">
+        <div style="font-size:.82rem;font-weight:700;color:#028090;margin-bottom:3px"><a href="https://titleix.ucsc.edu/alternative-resolution/" target="_blank" style="color:#028090;text-decoration:none;border-bottom:1px solid #028090">Alternative Resolution</a></div>
+        <div class="db" style="font-size:.73rem;line-height:1.4">
+          - Voluntary and binding<br>
+          - Both parties agree on terms<br>
+          - Focused on remedy, not discipline<br>
+          - No formal policy determination
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Amnesty + Supportive Measures -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
+      <div class="card" style="border-left:4px solid #3B6D11;padding:7px 12px">
+        <div class="dt" style="color:#3B6D11;margin-bottom:3px"><a href="https://policy.ucop.edu/doc/4000385/SVSH" target="_blank" style="color:#3B6D11;text-decoration:none;border-bottom:1px solid #3B6D11">🛡️ Amnesty</a></div>
+        <div class="db" style="font-size:.75rem;line-height:1.5">
+          - Alcohol/drug use will not count against you<br>
+          - Retaliation for reporting is a policy violation<br>
+          - Anonymous: <a href="https://ucsc.edu/safety" target="_blank" style="color:#3B6D11">ucsc.edu/safety</a>
+        </div>
+      </div>
+      <div class="card" style="border-left:4px solid #028090;padding:7px 12px">
+        <div class="dt" style="color:#028090;margin-bottom:3px"><a href="https://titleix.ucsc.edu/safety-supportive-measures/" target="_blank" style="color:#028090;text-decoration:none;border-bottom:1px solid #028090">Safety and Supportive Measures</a></div>
+        <div class="db" style="font-size:.75rem;line-height:1.5">
+          - Academic adjustments<br>
+          - Housing or schedule changes<br>
+          - No-contact directives<br>
+          - Available regardless of formal process
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:2px">
+      <button class="btn" onclick="goTo(6)">← Back</button>
+      <button class="btn primary" onclick="goTo(7)">Next: Resources →</button>
+    </div>
+  </div>
+
+  <!-- S5 Score + Tips -->
+  <div class="section" id="sec5">
+    
+    <h2 class="sh" style="margin-top:6px;margin-bottom:2px"><span class="section-icon" style="background:#EAF3DE">🤝</span>5 — Practical Safety Toolkit</h2>
+    <p class="lead" style="margin-bottom:8px">Before, during, and after.</p>
+    <div class="card-grid" style="gap:7px;margin:0 0 8px">
+      <div class="card" style="border-top:3px solid #185FA5;padding:10px 12px">
+        <div class="dt" style="margin-bottom:2px">✅ Before you go</div>
+        <div class="db" style="margin-top:3px;line-height:1.55">Set limits with a trusted friend · Agree on a check-in signal · Know the address and a way home · Eat before drinking</div>
+      </div>
+      <div class="card" style="border-top:3px solid #028090;padding:10px 12px">
+        <div class="dt" style="margin-bottom:2px">👀 While you're there</div>
+        <div class="db" style="margin-top:3px;line-height:1.55">Watch your drink · Check in on impaired friends · Trust your gut · "Are you okay?" is always right</div>
+      </div>
+      <div class="card" style="border-top:3px solid #3C3489;padding:10px 12px">
+        <div class="dt" style="margin-bottom:2px">🚨 If something feels off</div>
+        <div class="db" style="margin-top:3px;line-height:1.55">You can always leave · A bad feeling is a reason · Bystander intervention saves lives · Call 911 if needed</div>
+      </div>
+    </div>
+    <div class="card" style="border:1px solid #B5D4F4;background:#F0F7FF;padding:10px 14px;margin-bottom:8px">
+      <div class="dt" style="margin-bottom:6px">The FRIES model for consent <span class="pill pp">check every time</span></div>
+      <div class="fries-row" style="gap:6px;margin-top:6px">
+        <div class="fries-item" style="background:#185FA5;padding:8px 4px"><div class="fi-l">F</div><div class="fi-w">Freely given</div></div>
+        <div class="fries-item" style="background:#028090;padding:8px 4px"><div class="fi-l">R</div><div class="fi-w">Reversible</div></div>
+        <div class="fries-item" style="background:#3C3489;padding:8px 4px"><div class="fi-l">I</div><div class="fi-w">Informed</div></div>
+        <div class="fries-item" style="background:#3B6D11;padding:8px 4px"><div class="fi-l">E</div><div class="fi-w">Enthusiastic</div></div>
+        <div class="fries-item" style="background:#C05010;padding:8px 4px"><div class="fi-l">S</div><div class="fi-w">Specific</div></div>
+      </div>
+      <div style="margin-top:8px;font-size:.65rem;color:#8896A5;line-height:1.6">
+        <a href="https://www.plannedparenthood.org/blog/what-is-consent" target="_blank"
+           style="display:inline-block;margin-left:6px;background:#E01E5A;color:#fff;font-size:.6rem;font-weight:600;padding:2px 8px;border-radius:4px;text-decoration:none">
+          Planned Parenthood ↗
+        </a>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn" onclick="goTo(4)">← Back</button>
+      <button class="btn primary" onclick="goTo(6)">Next: Reporting →</button>
+    </div>
+  </div>
+
+  <!-- S6 Resources -->
+  <div class="section" id="sec6">
+    <h2 class="sh" style="margin-bottom:2px"><span class="section-icon" style="background:#FCEBEB">❤️</span>7 — Resources</h2>
+    <p class="lead" style="margin-bottom:8px">Confidential, campus, and national support - available right now.</p>
+    <div class="res-card" style="padding:8px 12px;margin-bottom:6px"><div class="res-title" style="font-size:.82rem">🔴 UCSC CARE - Center for Advocacy, Resources &amp; Empowerment</div><div class="res-sub" style="font-size:.73rem">Confidential support for survivors of sexual violence, domestic violence, and stalking.</div><div class="res-link" style="font-size:.73rem"><a href="https://care.ucsc.edu">care.ucsc.edu</a> · care@ucsc.edu</div></div>
+    <div class="res-card" style="border-left-color:#185FA5;padding:8px 12px;margin-bottom:6px"><div class="res-title" style="font-size:.82rem">🔵 UCSC Title IX Office</div><div class="res-sub" style="font-size:.73rem">Formal Title IX complaints, SHAPE training, policy questions, and reporting.</div><div class="res-link" style="font-size:.73rem"><a href="https://titleix.ucsc.edu">titleix.ucsc.edu</a> · titleix@ucsc.edu</div></div>
+    <div class="res-card" style="border-left-color:#3B6D11;padding:8px 12px;margin-bottom:6px"><div class="res-title" style="font-size:.82rem">🟢 UCSC SHOP - Student Health Outreach &amp; Promotion</div><div class="res-sub" style="font-size:.73rem">Peer educators · consent workshops · harm reduction · free safer-sex supplies.</div><div class="res-link" style="font-size:.73rem"><a href="https://shop.ucsc.edu">shop.ucsc.edu</a></div></div>
+    <div class="res-card" style="border-left-color:#CC4400;padding:8px 12px;margin-bottom:6px"><div class="res-title" style="font-size:.82rem">🟠 RAINN National Sexual Assault Hotline</div><div class="res-sub" style="font-size:.73rem">Confidential, 24/7 support. Online chat available.</div><div class="res-link" style="font-size:.73rem">1-800-656-HOPE (4673) · <a href="https://rainn.org">rainn.org</a></div></div>
+    <div class="res-card" style="border-left-color:#9060CC;padding:8px 12px;margin-bottom:6px"><div class="res-title" style="font-size:.82rem">🟣 Crisis Text Line</div><div class="res-sub" style="font-size:.73rem">Text HOME to 741741 - free, confidential, anytime.</div></div>
+    <div style="margin-top:8px;padding:10px 14px;border-radius:8px;background:#E6F1FB;border:1px solid #B5D4F4">
+      <div style="font-size:.78rem;color:#0C447C;font-weight:700;margin-bottom:2px">✅ Training complete</div>
+      <div style="font-size:.73rem;color:#185FA5;line-height:1.5">Consent is ongoing, enthusiastic, and can always be withdrawn. When in doubt - ask. When uncertain about someone's state - wait.</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+      <button class="btn" onclick="goTo(6)">← Back</button>
+      <button class="btn primary" onclick="restart()">↺ Restart training</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TOTAL=8;
+let cur=0;
+const labels=['EEP PARTY SAFETY TRAINING','🛡️ 1','📊 2','⚠️ 3','🎯 4','🤝🏽 5','🆘 6','❤️ 7'];
+const SECTION_IDS=['sec0','sec1','sec2','sec3','sec3b','sec5','sec4b','sec6'];
+
+const bacLevels=[
+  {l:"0.00% - Sober. Full capacity for clear, voluntary consent.",c:"#3B6D11",p:2},
+  {l:"0.02–0.05% - Mild: relaxed, lowered inhibitions. Judgment beginning to slip.",c:"#5A8F2A",p:25},
+  {l:"0.06–0.10% - Moderate: impaired judgment, reduced coordination. Ability to assess a situation is compromised.",c:"#D08010",p:45},
+  {l:"0.11–0.19% - High: significant loss of coordination and judgment. Risk of incapacitation.",c:"#C05010",p:65},
+  {l:"0.20–0.30% - Severe: confusion, possible blackout. Cannot give consent.",c:"#E24B4A",p:85},
+  {l:"0.31%+ - Dangerous: risk of losing consciousness. Medical emergency territory.",c:"#A32D2D",p:100}
+];
+
+
+
+function renderDots(){
+  const el=document.getElementById('navDots');
+  el.innerHTML='';
+  for(let i=0;i<8;i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i===cur?' active':i<cur?' done':'');
+    el.appendChild(d);
+  }
+}
+
+function goTo(n){
+  document.getElementById(SECTION_IDS[cur]).classList.remove('active');
+  cur=n;
+  document.getElementById(SECTION_IDS[n]).classList.add('active');
+  document.getElementById('sectionLabel').textContent=labels[n];
+  document.getElementById('progressFill').style.width=Math.round(n/(TOTAL-1)*100)+'%';
+  renderDots();
+  
+  if(n===6){}  // reporting slide - static
+}
+
+function updateBAC(v){
+  const l=bacLevels[v];
+  document.getElementById('bacFill').style.width=l.p+'%';
+  document.getElementById('bacFill').style.background=l.c;
+  document.getElementById('bacLabel').textContent=l.l;
+}
+
+
+function restart(){goTo(0);}
+
+let t=600;
+function tick(){
+  if(t<=0){document.getElementById('timerDisplay').textContent='0:00';return;}
+  t--;
+  const m=Math.floor(t/60),s=t%60;
+  document.getElementById('timerDisplay').textContent=m+':'+(s<10?'0':'')+s;
+  setTimeout(tick,1000);
+}
+tick();
+renderDots();
+</script>
+
+<style>
+#edit-toggle{position:fixed;bottom:18px;right:18px;z-index:9999;background:#0A1F44;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25);font-family:system-ui,sans-serif}
+#edit-toggle:hover{background:#185FA5}
+#edit-toggle.active{background:#3B6D11}
+.edit-hint{position:fixed;bottom:52px;right:18px;z-index:9999;background:#0A1F44;color:#AECBE8;font-size:11px;padding:6px 12px;border-radius:6px;display:none;font-family:system-ui,sans-serif;line-height:1.5;max-width:220px;text-align:right}
+[contenteditable=true]{outline:2px dashed #185FA5!important;outline-offset:2px;border-radius:3px;cursor:text!important;min-width:4px;display:inline-block}
+[contenteditable=true]:focus{outline:2px solid #3B6D11!important;background:rgba(24,95,165,.06)}
+#save-bar{position:fixed;top:0;left:0;right:0;z-index:9999;background:#3B6D11;color:#fff;font-size:12px;font-family:system-ui,sans-serif;padding:8px 18px;display:none;align-items:center;justify-content:space-between}
+#save-bar a{color:#C0DD97;font-weight:600;cursor:pointer;text-decoration:underline}
+</style>
+
+<button id="edit-toggle" onclick="toggleEdit()">✏️ Edit mode</button>
+<div class="edit-hint" id="edit-hint">Click any text to edit it directly.<br>Changes are live instantly.</div>
+<div id="save-bar" id="save-bar">
+  <span>✅ Edit mode on - click any text to edit</span>
+  <span><a onclick="saveHTML()">⬇ Download edited file</a> &nbsp;|&nbsp; <a onclick="toggleEdit()">✕ Exit edit mode</a></span>
+</div>
+
+<script>
+let editMode=false;
+const editables=[];
+
+function toggleEdit(){
+  editMode=!editMode;
+  const btn=document.getElementById('edit-toggle');
+  const hint=document.getElementById('edit-hint');
+  const bar=document.getElementById('save-bar');
+
+  if(editMode){
+    btn.textContent='✕ Exit edit mode';
+    btn.classList.add('active');
+    hint.style.display='block';
+    bar.style.display='flex';
+    // Make all text nodes in .section elements editable
+    document.querySelectorAll(
+      '.section h1,.section h2,.section p,.section .dt,.section .db,.section .pill,'+
+      '.section .res-title,.section .res-sub,.section .fi-w,.section .stat-lbl,'+
+      '.section [style*="font-size"],#sec0 h1,#sec0 p'
+    ).forEach(el=>{
+      if(el.id==='sectionLabel'||el.closest('#navDots'))return;
+      el.setAttribute('contenteditable','true');
+      el.setAttribute('spellcheck','true');
+      editables.push(el);
+    });
+  } else {
+    btn.textContent='✏️ Edit mode';
+    btn.classList.remove('active');
+    hint.style.display='none';
+    bar.style.display='none';
+    editables.forEach(el=>el.removeAttribute('contenteditable'));
+    editables.length=0;
+  }
+}
+
+function saveHTML(){
+  // Capture current DOM state including edits
+  const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Partying Safely - EEP Training - edited.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
+</body>
+</html>
