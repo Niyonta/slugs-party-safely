@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slugs Party Safely - Scenario Assignment</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#F7F9FC;color:#2D3748;min-height:100vh}
+.app{max-width:780px;margin:0 auto;padding:20px 16px}
+.header{background:#0A1F44;border-radius:12px;padding:18px 22px;margin-bottom:20px;color:#fff}
+.header h1{font-size:1.3rem;font-weight:700;margin-bottom:3px}
+.header p{font-size:.82rem;color:#AECBE8;line-height:1.5}
+.progress-wrap{background:#E8EDF2;border-radius:8px;height:8px;margin-bottom:6px;overflow:hidden}
+.progress-fill{height:100%;background:#185FA5;border-radius:8px;transition:width .4s}
+.progress-label{font-size:.72rem;color:#8896A5;margin-bottom:18px}
+.scenario-card{background:#fff;border-radius:12px;border:1px solid #E8EDF2;padding:20px;margin-bottom:16px}
+.scenario-num{font-size:.72rem;font-weight:700;color:#8896A5;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.scenario-q{font-size:.95rem;font-weight:600;color:#0A1F44;line-height:1.6;margin-bottom:16px}
+.opt{display:block;width:100%;text-align:left;padding:10px 14px;border:1.5px solid #E8EDF2;border-radius:8px;font-size:.82rem;font-family:inherit;cursor:pointer;margin-bottom:8px;background:#fff;color:#2D3748;transition:border-color .15s,background .15s;line-height:1.4}
+.opt:hover{border-color:#185FA5;background:#F0F7FF}
+.opt.correct{border-color:#3B6D11;background:#EAF3DE;color:#1A3A08;font-weight:600}
+.opt.wrong{border-color:#A32D2D;background:#FCEBEB;color:#5A1A1A}
+.opt.reveal{border-color:#3B6D11;background:#EAF3DE;color:#1A3A08}
+.opt:disabled{cursor:default}
+.fb{border-radius:8px;padding:12px 14px;font-size:.82rem;line-height:1.6;margin-top:4px;display:none}
+.fb.show{display:block}
+.fb.good{background:#EAF3DE;border:1px solid #97C459;color:#1A3A08}
+.fb.bad{background:#FCEBEB;border:1px solid #F09595;color:#5A1A1A}
+.nav{display:flex;gap:10px;margin-top:16px;align-items:center}
+.btn{padding:9px 18px;border-radius:8px;font-size:.82rem;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn.primary{background:#185FA5;color:#fff}
+.btn.sec{background:#E8EDF2;color:#2D3748}
+.result{background:#fff;border-radius:12px;border:1px solid #E8EDF2;padding:28px 24px;text-align:center;display:none}
+.result.show{display:block}
+.badge{font-size:3.5rem;margin-bottom:12px}
+.result-score{font-size:2rem;font-weight:700;color:#0A1F44;margin-bottom:8px}
+.result-msg{font-size:.92rem;color:#2D3748;line-height:1.6;margin-bottom:20px}
+.result-detail{font-size:.78rem;color:#8896A5;margin-bottom:20px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🎯 Scenario Assignment</h1>
+    <p>Complete within 30 minutes of the Slugs Party Safely training. Six scenarios - read each carefully and choose the best response.</p>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+  <div class="progress-label" id="progLabel">Scenario 1 of 6</div>
+
+  <div id="quizArea"></div>
+
+  <div class="result" id="resultBox">
+    <div class="badge" id="resBadge"></div>
+    <div class="result-score" id="resScore"></div>
+    <div class="result-msg" id="resMsg"></div>
+    <div class="result-detail" id="resDetail"></div>
+    <button class="btn primary" onclick="restart()">Try again</button>
+    &nbsp;
+    <button class="btn sec" onclick="window.close()">Done</button>
+  </div>
+</div>
+
+<script>
+const scenarios = [
+  {
+    q: "Ayaz has been drinking heavily all night and is visibly slurring and stumbling. Someone they have been flirting with invites them to leave together. Ayaz says 'sure.' A friend nearby notices Ayaz's state. Is Ayaz able to consent, and should the friend intervene?",
+    opts: [
+      "Ayaz said yes out loud - that counts as consent. The friend should stay out of it.",
+      "Ayaz appears incapacitated. That is not valid consent. The friend should intervene directly.",
+      "It depends on how well Ayaz knows the other person.",
+      "Ayaz is responsible for their own choices."
+    ],
+    correct: 1,
+    good: "Correct on both counts. Visible impairment - slurring, stumbling - signals likely incapacitation under UC SVSH Policy. Consent cannot be affirmative when someone cannot understand the situation. The friend's best move is a direct, low-key distraction. 'Hey Ayaz, we need you!' One sentence can change the outcome.",
+    bad: "Reconsider. Under UC policy, consent must be affirmative and conscious. Slurring and stumbling signal incapacitation regardless of what words are used. Bystander intervention using a direct, low-key distraction is one of the most effective prevention strategies - waiting is not neutral."
+  },
+  {
+    q: "Reese and Sam had a previous sexual encounter last weekend. Tonight at a party, Reese assumes things will continue and does not check in. Sam feels uncomfortable and freezes but says nothing. Is there a consent issue?",
+    opts: [
+      "No - they have been together before, so consent carries over.",
+      "Yes - past consent does not apply to present or future encounters.",
+      "No - Sam did not say no.",
+      "It depends on the nature of their relationship."
+    ],
+    correct: 1,
+    good: "Correct. Consent given once does not carry over to any future encounter. Each interaction requires its own affirmative, conscious agreement. Freezing or staying silent is not consent - UC SVSH Policy is explicit that lack of resistance does not demonstrate agreement.",
+    bad: "Not quite. Prior sexual activity never implies ongoing consent. UC SVSH Policy states clearly that past consent is not present or future consent, and that silence or lack of resistance does not constitute agreement. Each encounter requires fresh, affirmative consent."
+  },
+  {
+    q: "Li was sexually assaulted at a party where alcohol was involved. Li is underage and afraid that reporting will lead to a conduct violation for drinking. What should Li know?",
+    opts: [
+      "UCSC will automatically report the alcohol use to the police.",
+      "Li should wait until a clearer headspace to decide.",
+      "UCSC's amnesty policy means alcohol use will not be held against Li for coming forward.",
+      "Reporting is only an option if Li was completely sober."
+    ],
+    correct: 2,
+    good: "Correct. UCSC's Responsible Action Plan exists precisely to remove this barrier. Alcohol or drug use connected to an incident will not result in a conduct violation for the person reporting. CARE offers confidential support before any formal decision is made.",
+    bad: "Under UCSC policy, amnesty protections mean alcohol or drug use will not be used against a survivor who reports. Fear of a conduct violation should never prevent someone from seeking help. CARE at care@ucsc.edu provides confidential support - no formal commitment required."
+  },
+  {
+    q: "Jordan has had two drinks and invites a friend they have been dating to come back to their room. The friend agrees. Later that night, Jordan has five more drinks and initiates sexual activity again. The friend, who is sober, is uncomfortable but does not say anything. Is there a problem?",
+    opts: [
+      "No - the friend agreed earlier and did not say stop.",
+      "No - Jordan's drinking means Jordan cannot be held responsible.",
+      "Yes - consent from earlier does not apply later, and the friend's discomfort and silence is not agreement.",
+      "It depends on whether they have been together before."
+    ],
+    correct: 2,
+    good: "Correct. Consent is ongoing and applies separately to each act. The earlier agreement does not cover later activity. The friend's silence and discomfort is not affirmative consent. Jordan's intoxication does not remove Jordan's responsibility to obtain consent.",
+    bad: "This situation has two problems. First, consent given earlier does not extend to later activity. Second, Jordan's intoxication does not remove the obligation to check in - UC policy holds the initiating party responsible regardless of their own impairment."
+  },
+  {
+    q: "At a party, you notice a classmate who is visibly very drunk being led away by someone they do not appear to know well. The classmate looks confused. What is the most effective bystander response?",
+    opts: [
+      "Wait and observe - it might be fine.",
+      "Text the classmate to check in.",
+      "Call 911 immediately.",
+      "Walk over and create a direct, low-key distraction - 'Hey! We have been looking for you!'"
+    ],
+    correct: 3,
+    good: "Correct. Direct, non-confrontational intervention is the most effective bystander strategy. A simple distraction can interrupt a dangerous situation without escalation. If the situation appears immediately dangerous, then calling 911 is appropriate - but a direct approach first is usually faster and more effective.",
+    bad: "In this situation, your classmate's visible intoxication and confusion warrant action, not waiting. Research consistently shows that direct bystander intervention - a simple distraction or check-in - is one of the most effective ways to prevent harm. Waiting gives the impression it is fine when it may not be."
+  },
+  {
+    q: "Alex tells you they were sexually assaulted at a party last night. They are not sure if they want to report but are scared and do not know what their options are. What is the most helpful first step you can offer?",
+    opts: [
+      "Encourage them to file a police report right away before evidence is lost.",
+      "Tell them to contact the Title IX office and start a formal process.",
+      "Suggest they contact UCSC CARE, which is confidential and requires no formal commitment.",
+      "Advise them to wait and see how they feel in a few days before deciding anything."
+    ],
+    correct: 2,
+    good: "Correct. CARE advocates are confidential - they are not mandatory reporters. Alex can talk through what happened, understand all options, and decide on next steps without triggering a formal process. This is exactly the right first step for someone who is scared and unsure.",
+    bad: "The most important thing when someone discloses is to protect their agency. CARE at care@ucsc.edu is confidential, requires no formal commitment, and allows Alex to understand all options before deciding anything. Pushing toward a formal report before they are ready can retraumatize and deter help-seeking."
+  }
+];
+
+let current = 0, score = 0, answered = false;
+
+function render() {
+  const s = scenarios[current];
+  document.getElementById('progFill').style.width = (current / scenarios.length * 100) + '%';
+  document.getElementById('progLabel').textContent = 'Scenario ' + (current + 1) + ' of ' + scenarios.length;
+  const html = `
+    <div class="scenario-card">
+      <div class="scenario-num">Scenario ${current + 1}</div>
+      <div class="scenario-q">${s.q}</div>
+      ${s.opts.map((o, i) => `<button class="opt" id="opt${i}" onclick="answer(${i})">${o}</button>`).join('')}
+      <div class="fb" id="fb"></div>
+      <div class="nav" id="nav" style="display:none">
+        ${current < scenarios.length - 1
+          ? `<button class="btn primary" onclick="next()">Next scenario →</button>`
+          : `<button class="btn primary" onclick="showResult()">See my results →</button>`}
+      </div>
+    </div>`;
+  document.getElementById('quizArea').innerHTML = html;
+  answered = false;
+}
+
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const s = scenarios[current];
+  const isCorrect = i === s.correct;
+  if (isCorrect) score++;
+  document.querySelectorAll('.opt').forEach((b, idx) => {
+    b.disabled = true;
+    if (idx === s.correct) b.classList.add('reveal');
+    if (idx === i && !isCorrect) b.classList.add('wrong');
+    if (idx === i && isCorrect) b.classList.add('correct');
+  });
+  const fb = document.getElementById('fb');
+  fb.className = 'fb show ' + (isCorrect ? 'good' : 'bad');
+  fb.textContent = isCorrect ? '✅ ' + s.good : '❌ ' + s.bad;
+  document.getElementById('nav').style.display = 'flex';
+}
+
+function next() {
+  current++;
+  render();
+}
+
+function showResult() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progLabel').textContent = 'Complete';
+  const box = document.getElementById('resultBox');
+  box.classList.add('show');
+  document.getElementById('resScore').textContent = score + ' / ' + scenarios.length;
+  if (score === scenarios.length) {
+    document.getElementById('resBadge').textContent = '🏆';
+    document.getElementById('resMsg').textContent = 'Top Upstander! You answered every scenario correctly. You understand consent, context, and community care. Carry that into every room you walk into.';
+  } else {
+    document.getElementById('resBadge').textContent = '📚';
+    document.getElementById('resMsg').textContent = 'Learning is all about practice. Review the feedback on the scenarios you missed and give it another go - every attempt builds the judgment that matters in real situations.';
+  }
+  document.getElementById('resDetail').textContent = 'Scenario assignment complete. Return to care.ucsc.edu or titleix.ucsc.edu if you have questions.';
+}
+
+function restart() {
+  current = 0; score = 0; answered = false;
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('resultBox').classList.remove('show');
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
